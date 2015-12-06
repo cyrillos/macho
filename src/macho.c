@@ -5,14 +5,59 @@
 #include <getopt.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include <fcntl.h>
+
+#include <sys/types.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 
 #include "macho.h"
 #include "log.h"
 
+static int __parse_macho(const char *fname, void *mem, size_t size)
+{
+	pr_info("Parsing %s (at %p size %zu)\n", fname, mem, size);
+	return 0;
+}
+
+static int parse_macho(const char *fname)
+{
+	int fd = open(fname, O_RDONLY);
+	struct stat st;
+	size_t size;
+	void *mem;
+	int ret;
+
+	if (fd < 0) {
+		pr_perror("Can't open %s", fname);
+		return -1;
+	}
+
+	if (fstat(fd, &st)) {
+		pr_perror("Can't stat %s", fname);
+		close(fd);
+		return -1;
+	}
+
+	mem = mmap(NULL, st.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+	if (mem == MAP_FAILED) {
+		pr_perror("Can't mmap %s", fname);
+		close(fd);
+		return -1;
+	}
+
+	ret = __parse_macho(fname, mem, st.st_size);
+	munmap(mem, st.st_size);
+	close(fd);
+
+	return ret;
+}
+
 int main(int argc, char *argv[])
 {
+	struct stat st;
 	char *fname;
 	int ret = -1;
 	int opt, idx;
@@ -42,7 +87,8 @@ int main(int argc, char *argv[])
 			goto usage;
 		}
 	}
-	return 0;
+
+	return parse_macho(fname);
 
 usage:
 	pr_msg("\n"
