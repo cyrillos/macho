@@ -18,7 +18,31 @@
 
 static int __parse_macho(const char *fname, void *mem, size_t size)
 {
+	mach_header_64_t *hdr = mem;
+
 	pr_info("Parsing %s (at %p size %zu)\n", fname, mem, size);
+
+	if (size < sizeof(*hdr)) {
+		pr_err("Too small size\n");
+		return -1;
+	}
+
+	if (hdr->magic != MH_MAGIC_64) {
+		pr_err("Unknown magic\n");
+		return -1;
+	}
+
+	pr_info("Header (MachO 64)\n"
+		" magic       %#x\n"
+		" cputype     %#x\n"
+		" cpusubtype  %#x\n"
+		" filetype    %#x\n"
+		" ncmds       %u\n"
+		" sizeofcmds  %u\n"
+		" flags       %#x\n",
+		hdr->magic, hdr->cputype, hdr->cpusubtype,
+		hdr->filetype, hdr->ncmds, hdr->sizeofcmds, hdr->flags);
+
 	return 0;
 }
 
