@@ -1,15 +1,22 @@
-__nmak_dir=../scripts/
+#
+# Mandatory part to include nmak itself
+__nmak_dir=nmak/scripts/
 export __nmak_dir
 
 include $(__nmak_dir)include.mk
+include $(__nmak_dir)macro.mk
 
-.PHONY: all clean
+PROGRAM := macho
 
-all:
-	$(call msg-gen, macho)
-	$(Q) $(MAKE) -C macho
+$(eval $(call gen-program,$(PROGRAM),src))
 
 clean:
-	$(Q) $(MAKE) -C macho clean
+	$(call msg-clean, $(PROGRAM))
+	$(Q) $(RM) $(PROGRAM)
+	$(Q) $(MAKE) $(build)=src $@
 
-.DEFAULT_GOAL ?= all
+all: $(PROGRAM)
+	@true
+.PHONY: all
+
+.DEFAULT_GOAL := all

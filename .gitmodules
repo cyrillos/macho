@@ -1,0 +1,3 @@
+[submodule "nmak"]
+	path = nmak
+	url = git@github.com:cyrillos/nmak.git
