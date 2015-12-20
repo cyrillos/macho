@@ -5,12 +5,13 @@
 
 #define MH_MAGIC			(0xfeedface)
 #define MH_MAGIC_64			(0xfeedfacf)
-
-#define MH_OBJECT			(0x1)
+#define FAT_MAGIC			(0xcafebabe)
 
 #define LC_SEGMENT			(0x00000001)
 #define LC_SYMTAB			(0x00000002)
 #define LC_SEGMENT_64			(0x00000019)
+#define LC_VERSION_MIN_MACOSX		(0x00000024)
+#define LC_DYSYMTAB			(0x0000000b)
 
 #define SECTION_TYPE			(0x000000ff)
 #define SECTION_ATTRIBUTES_SYS		(0x00ffff00)
@@ -102,6 +103,36 @@ typedef struct mach_segment_command_64 {
 	uint32_t	nsects;
 	uint32_t	flags;
 } mach_segment_command_64_t;
+
+typedef struct mach_version_min_command {
+	uint32_t	cmd;
+	uint32_t	cmdsize;
+	uint32_t	version;
+	uint32_t	sdk;
+} mach_version_min_command_t;
+
+typedef struct mach_dysymtab_command {
+	uint32_t	cmd;
+	uint32_t	cmdsize;
+	uint32_t	ilocalsym;
+	uint32_t	nlocalsym;
+	uint32_t	iextdefsym;
+	uint32_t	nextdefsym;
+	uint32_t	iundefsym;
+	uint32_t	nundefsym;
+	uint32_t	tocoff;
+	uint32_t	ntoc;
+	uint32_t	modtaboff;
+	uint32_t	nmodtab;
+	uint32_t	extrefsymoff;
+	uint32_t	nextrefsyms;
+	uint32_t	indirectsymoff;
+	uint32_t	nindirectsyms;
+	uint32_t	extreloff;
+	uint32_t	nextrel;
+	uint32_t	locreloff;
+	uint32_t	nlocrel;
+} mach_dysymtab_command_t;
 
 typedef struct mach_section {
 	char		sectname[16];
