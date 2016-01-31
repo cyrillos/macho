@@ -174,7 +174,7 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 		if (!nlist[i].n_strx)
 			continue;
 		pr_info("%08x |  n_strx %#8x -> %s\n"
-			"         |    n_type %4x n_sect %4x\n"
+			"         |    n_type %#4x n_sect  %#4x\n"
 			"         |    n_desc %#4x n_value %#lx\n",
 			__off(&nlist[i]), nlist[i].n_strx,
 			strtab + nlist[i].n_strx,
