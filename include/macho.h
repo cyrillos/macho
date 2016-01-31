@@ -27,12 +27,16 @@
 #define R_ABS				(0)
 #define R_SCATTERED			(0x80000000)
 
-#define N_TYPE				(0x0e)
-#define N_EXT				(0x01)
+#define N_UNDF				(0x00)
+#define N_ABS				(0x02)
+#define N_SECT				(0x0e)
+#define N_PBUD				(0x0c)
+#define N_INDR				(0x0a)
 
-#define N_UNDF				(0x0)
-#define N_ABS				(0x2)
-#define N_SECT				(0xe)
+#define N_TYPE				(0x0e)
+#define N_STAB				(0xe0)
+#define N_PEXT				(0x10)
+#define N_EXT				(0x01)
 
 #define NO_SECT				(0)
 #define MAX_SECT			(0xff)

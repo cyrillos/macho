@@ -174,11 +174,18 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 		if (!nlist[i].n_strx)
 			continue;
 		pr_info("%08x |  n_strx %#8x -> %s\n"
-			"         |    n_type %#4x n_sect  %#4x\n"
+			"         |    n_type %#4x n_sect  %#4x -> %c%c%c%c%c%c%c\n"
 			"         |    n_desc %#4x n_value %#lx\n",
 			__off(&nlist[i]), nlist[i].n_strx,
 			strtab + nlist[i].n_strx,
 			nlist[i].n_type, nlist[i].n_sect,
+			(nlist[i].n_type & N_ABS)	? 'A' : '.',
+			(nlist[i].n_type & N_SECT)	? 'S' : '.',
+			(nlist[i].n_type & N_PBUD)	? 'P' : '.',
+			(nlist[i].n_type & N_INDR)	? 'I' : '.',
+			(nlist[i].n_type & N_STAB)	? 'B' : '.',
+			(nlist[i].n_type & N_PEXT)	? 'P' : '.',
+			(nlist[i].n_type & N_EXT)	? 'E' : '.',
 			nlist[i].n_desc, nlist[i].n_value);
 	}
 
