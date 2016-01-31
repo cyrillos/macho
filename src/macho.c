@@ -144,6 +144,28 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 		return -1;
 	}
 
+	pr_info("------------------------------\n");
+
+	if (seg) {
+		mach_section_64_t *s = (void *)seg + sizeof(*seg);
+		for (i = 0; i < seg->nsects; i++, s++) {
+			pr_info("%08x | Section \n", __off(s));
+			pr_info("         |   sectname            %-16s\n"
+				"         |   segname             %-16s\n"
+				"         |   addr                %#lx\n"
+				"         |   size                %lu\n"
+				"         |   offset              %#lx\n"
+				"         |   align               %lu\n"
+				"         |   reloff              %#lx\n"
+				"         |   nreloc              %lu\n"
+				"         |   flags               %#lx\n",
+				s->sectname, s->segname, (long)s->addr,
+				(unsigned long)s->size, (long)s->offset,
+				(unsigned long)s->align, (long)s->reloff,
+				(unsigned long)s->nreloc, (long)s->flags);
+		}
+	}
+
 	nlist = mem + symtab->symoff;
 	strtab = mem + symtab->stroff;
 
