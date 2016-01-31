@@ -72,13 +72,13 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 	}
 
 	pr_info("%08x | Header (MachO 64)\n"
-		"         |  magic             %#x\n"
-		"         |  cputype           %#x\n"
-		"         |  cpusubtype        %#x\n"
-		"         |  filetype          %#x\n"
-		"         |  ncmds             %u\n"
-		"         |  sizeofcmds        %u\n"
-		"         |  flags             %#x\n",
+		"         |  magic                %#x\n"
+		"         |  cputype              %#x\n"
+		"         |  cpusubtype           %#x\n"
+		"         |  filetype             %#x\n"
+		"         |  ncmds                %u\n"
+		"         |  sizeofcmds           %u\n"
+		"         |  flags                %#x\n",
 		__off(hdr), hdr->magic, hdr->cputype, hdr->cpusubtype,
 		hdr->filetype, hdr->ncmds, hdr->sizeofcmds, hdr->flags);
 
@@ -91,9 +91,9 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 			pr_info("%08x |  %-20s cmdsize %d\n"
 				"         |   segname             %s\n"
 				"         |   vmaddr              %#lx\n"
-				"         |   vmsize              %ld\n"
+				"         |   vmsize              %#lx\n"
 				"         |   fileoff             %#lx\n"
-				"         |   filesize            %ld\n"
+				"         |   filesize            %#lx\n"
 				"         |   maxprot             %#x\n"
 				"         |   initprot            %#x\n"
 				"         |   nsects              %d\n"
@@ -119,7 +119,7 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 				"         |   symoff              %#lx\n"
 				"         |   nsyms               %#lx\n"
 				"         |   stroff              %#x\n"
-				"         |   strsize             %u\n",
+				"         |   strsize             %#lx\n",
 				__off(symtab), cmd_name(LC_SYMTAB), symtab->cmdsize,
 				symtab->symoff, symtab->nsyms,
 				symtab->stroff, symtab->strsize);
@@ -153,11 +153,11 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 			pr_info("         |   sectname            %-16s\n"
 				"         |   segname             %-16s\n"
 				"         |   addr                %#lx\n"
-				"         |   size                %lu\n"
+				"         |   size                %#lx\n"
 				"         |   offset              %#lx\n"
-				"         |   align               %lu\n"
+				"         |   align               %#lx\n"
 				"         |   reloff              %#lx\n"
-				"         |   nreloc              %lu\n"
+				"         |   nreloc              %%lx\n"
 				"         |   flags               %#lx\n",
 				s->sectname, s->segname, (long)s->addr,
 				(unsigned long)s->size, (long)s->offset,
