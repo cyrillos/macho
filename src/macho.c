@@ -157,7 +157,7 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 				"         |   offset              %#lx\n"
 				"         |   align               %#lx\n"
 				"         |   reloff              %#lx\n"
-				"         |   nreloc              %%lx\n"
+				"         |   nreloc              %#lx\n"
 				"         |   flags               %#lx\n",
 				s->sectname, s->segname, (long)s->addr,
 				(unsigned long)s->size, (long)s->offset,
