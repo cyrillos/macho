@@ -48,8 +48,8 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 {
 	mach_header_64_t *hdr = mem;
 	mach_load_command_t *cmds;
+	size_t i, j;
 	void *p;
-	size_t i;
 
 	mach_dysymtab_command_t *dysymtab = NULL;
 	mach_version_min_command_t *ver = NULL;
@@ -163,6 +163,27 @@ static int __parse_macho(const char *fname, void *mem, size_t size)
 				(unsigned long)s->size, (long)s->offset,
 				(unsigned long)s->align, (long)s->reloff,
 				(unsigned long)s->nreloc, (long)s->flags);
+
+			if (s->nreloc) {
+				macho_relocation_info_t *r = mem + s->reloff;
+				pr_info("         |    ----------------\n");
+				for (j = 0; j < s->nreloc; j++, r++) {
+					pr_info("%08x |    Reloc \n", __off(r));
+					pr_info("         |      r_address        %#x\n"
+						"         |      r_symbolnum      %#x\n"
+						"         |      r_pcrel          %#x\n"
+						"         |      r_length         %#x\n"
+						"         |      r_extern         %#x\n"
+						"         |      r_type           %#x\n",
+						(unsigned int)r->r_address,
+						(unsigned int)r->r_symbolnum,
+						(unsigned int)r->r_pcrel,
+						(unsigned int)r->r_length,
+						(unsigned int)r->r_extern,
+						(unsigned int)r->r_type);
+				}
+				pr_info("         |    ----------------\n");
+			}
 		}
 	}
 
